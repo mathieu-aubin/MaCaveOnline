@@ -36,7 +36,8 @@
 	}
 
 	// Gestion nouvelle région
-	if(isNouvelleEntree($region))
+	$newRegion = isNouvelleEntree($region);
+	if($newRegion)
 	{
 		// Insertion du nom de la nouvelle région
 		$insertNouvelleRegion = $connexion->prepare('INSERT INTO region(region) VALUES(:region)');
@@ -52,7 +53,8 @@
 		else $erreur = true;
 
 		// Gestion nouvelle appellation si présente avec la nouvelle région
-		if(isNouvelleEntree($appellation)
+		$newAoc = isNouvelleEntree($appellation);
+		if($newAoc)
 		{
 			// Insertion de la nouvelle appellation
 			$insertNouvelleAppellation = $connexion->prepare('INSERT INTO appellation(appellation, FK_region) VALUES(:aoc, :region)');
@@ -71,7 +73,8 @@
 	}
 
 	// Gestion nouveau lieu d'achat
-	if(isNouvelleEntree($lieuAchat))
+	$newAchat = isNouvelleEntree($lieuAchat);
+	if($newAchat)
 	{
 		// Insertion du nouveau lieu d'achat
 		$insertNouveauLieuAchat = $connexion->prepare('INSERT INTO lieu_achat(lieu_achat) VALUES(:lieu_achat)');
@@ -88,7 +91,8 @@
 	}
 
 	// Gestion nouveau lieu de stockage
-	if(isNouvelleEntree($lieuStockage))
+	$newStockage = isNouvelleEntree($lieuStockage);
+	if($newStockage)
 	{
 		$insertNouveauLieuStockage = $connexion->prepare('INSERT INTO lieu_stockage(lieu_stockage) VALUES(:lieu_stockage)');
 		$insertNouveauLieuStockage->bindValue('lieu_stockage', $lieuStockage, PDO::PARAM_STR);
@@ -103,7 +107,7 @@
 		else $erreur = true;
 	}
 
-	$req = 'INSERT INTO vins(
+	/*$req = 'INSERT INTO vins(
 		FK_region,
 		FK_type,
 		FK_appellation,
@@ -126,53 +130,37 @@
 		'.$typePlat.'
 		)';
 echo $req;
-exit;
+exit;*/
 
 	// Préparation requete insertion d'un nouveau vin (non lié à un utilisateur)
-	$stmt = $connexion->prepare('INSERT INTO vins(
-		FK_region,
-		FK_type,
-		FK_appellation,
-		nom,
-		annee,
-		degre_alcool,
-		conso_partir,
-		conso_avant,
-		FK_type_plat
-		) 
-		VALUES(
-		:FK_region,
-		:FK_type,
-		:FK_appellation,
-		:nom,
-		:annee,
-		:degre_alcool,
-		:conso_partir,
-		:conso_avant,
-		:FK_type_plat,
-		:Demo
-		)');
-	$stmt->bindValue('FK_region', $region, PDO::PARAM_INT);
-	$stmt->bindValue('FK_type', $type, PDO::PARAM_INT);
-	$stmt->bindValue('FK_appellation', $appellation, PDO::PARAM_INT);
-	$stmt->bindValue('nom', $nom, PDO::PARAM_STR);
-	$stmt->bindValue('annee', $annee, PDO::PARAM_STR);
-	$stmt->bindValue('degre_alcool', $degreAlcool, PDO::PARAM_STR);
-	$stmt->bindValue('conso_partir', $consoPartir, PDO::PARAM_STR);
-	$stmt->bindValue('conso_avant', $consoAvant, PDO::PARAM_STR);
-	$stmt->bindValue('FK_type_plat', $typePlat, PDO::PARAM_STR);
-	$stmt->bindValue('Demo', $demo, PDO::PARAM_STR);
+	$req = 'INSERT INTO vins(FK_region,	FK_type, FK_appellation, nom, annee, degre_alcool, conso_partir, conso_avant, FK_type_plat, Demo) 
+		VALUES(:FK_region, :FK_type, :FK_appellation, :nom, :annee, :degre_alcool, :conso_partir, :conso_avant, :FK_type_plat, :Demo)';
+	$stmt = $connexion->prepare($req);
+	$stmt->bindValue(':FK_region', $region, PDO::PARAM_INT);
+	$stmt->bindValue(':FK_type', $type, PDO::PARAM_INT);
+	$stmt->bindValue(':FK_appellation', $appellation, PDO::PARAM_INT);
+	$stmt->bindValue(':nom', $nom, PDO::PARAM_STR);
+	$stmt->bindValue(':annee', $annee);
+	$stmt->bindValue(':degre_alcool', $degreAlcool, PDO::PARAM_STR);
+	$stmt->bindValue(':conso_partir', $consoPartir);
+	$stmt->bindValue(':conso_avant', $consoAvant);
+	$stmt->bindValue(':FK_type_plat', $typePlat, PDO::PARAM_STR);
+	$stmt->bindValue(':Demo', $demo);
 	$resultatRequete = $stmt->execute();
 
 	// on renvoie le résultat de la requête
 	// On récupère l'id crée pour l'utiliser dans la prochaine requête
-	if($resultatRequete) 
+	if($resultatRequete)
 	{
-		$idVin = $stmt->lastInsertId();
+		$idVin = $connexion->lastInsertId();
 		$stmt->closeCursor();
+		echo "IdVin : ".$idVin;
 	}
-	else $erreur = true;
-	//return $resultatRequete;
+	else
+	{
+		$erreur = true;
+	}
+
 	
 
 	// On vérifie si on a une nouvelle entrée pour une valeur
