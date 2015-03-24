@@ -1,0 +1,129 @@
+*{
+	margin: 0;
+	padding: 0;
+	outline: none;
+	border: 0;
+}
+
+body {
+	background-color: #FAF8F6;
+}
+
+@font-face {
+    font-family: "Police header";
+    src: url('fonts/JellykaWonderlandWine.ttf');
+}
+
+
+li {list-style-type: none}
+
+/* --- Index.php --- */
+#logo_demo{position: absolute}
+#section_demo{border: solid 1px #601421; padding-top: 10px;padding-bottom: 10px; background-color:rgba(254,222,165,0.25);min-width:200px; min-height: 150px}
+#login_form{height: 150px;}
+#connexion{margin-top: 15px;}
+#mode_demo{margin: -20px 15px 15px 0}
+#session div:first-child{text-align:center; margin: 20px 0;}
+#session a{display: block;width: 100%}
+#session a:hover{text-decoration: none}
+
+/* --- Header --- */
+header{margin: 20px 50px 30px 50px;min-height:200px;}
+#header_bg{height: 200px}
+#header_img{min-height: 110px;}
+#nav{border-radius: 0}
+nav{background-color: #742230; height: 112px;}
+#icone_search{height: 34px}
+#logo{height:110px;margin-top:-3px;border:solid 1px;}
+nav a{line-height: 110px;color:#fedea5;display: block;}
+nav a:hover{text-decoration: none;color:#FFF}
+nav ul li {height: 110px; margin-left: 20px;text-align: center}
+nav ul li:hover {height: 109px;background-color: #601421; cursor: pointer;}
+nav button.btn-primary{border-color:#601421;background-color: #601421;color:#fedea5}
+nav button.btn-primary:hover{border-color:#96191d;background-color: #96191d;color:#fedea5}
+#btn_recherche{line-height:85px;}
+.page-header{border: none; margin-bottom: -60px}
+
+/* --- Section --- */
+section .btn-primary{border-color:#96191d;background-color: #96191d;color:#fedea5;background-image:none;}
+section .btn-primary:hover{border-color:#601421;background-color: #601421;color:#fedea5}
+section #panels{height:420px;border: solid 1px #601421; padding-top: 10px;padding-bottom: 10px; background-color:rgba(254,222,165,0.25)}
+section #listing_vins{border: solid 1px #601421; margin-top: 15px;background-color:rgba(254,222,165,0.25)}
+
+/* --- Suivi cave ---*/
+section .nav-pills {background-color: #eeeeee; margin-bottom: 10px; -webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px; }
+section .nav-pills a{color: #601421}
+#suivi_cave{height: 280px;overflow-y: scroll}
+.cursor{cursor:pointer}
+
+/* --- Mini-fiche des vins --- */
+/* li */
+.mini-fiche {
+	background-image: url('../img/fond_mini_fiche.jpg');
+	padding: 2px;
+	margin-bottom:25px;
+	border: solid 1px #601421 ;
+	cursor: pointer;
+}
+.mini-fiche div:first-child {height:100px}
+.mini-fiche img{
+	float: left;
+	margin-right: 15px;
+	height: 100%
+}
+.nom_mini_fiche {font-weight: bold}
+
+/* --- Fiche d'un vin --- */
+.modal{overflow: auto;}
+.contenu_fiche{height: 500px;}
+.contenu_fiche div:first-child{height: 400px}
+.bouteille_blanc {background-image: url('../img/blanc_fiche.jpg');background-position: center;background-repeat: no-repeat;background-size: contain}
+.bouteille_rouge {background-image: url('../img/rouge_fiche.jpg');background-position: center;background-repeat: no-repeat;background-size: contain}
+.bouteille_rose {background-image: url('../img/rose_fiche.jpg');background-position: center;background-repeat: no-repeat;background-size: contain}
+.bouteille_mousseux {background-image: url('../img/mousseux_fiche.jpg');background-position: center;background-repeat: no-repeat;background-size: contain}
+
+.obligatoire {color:red;font-weight:bold;}
+
+/* --- Modification fiche --- */
+
+
+/* --- Pagination --- */
+#navPage {margin-top: 20px;display:inline-block; text-align: center}
+.current {color: #111; font-family: 'Armata', sans-serif; font-size: 12px; text-align: center; line-height: 21px;text-decoration: none; margin: 3px; padding: 4px 8px 4px 8px; background-image: url('../img/pagination_active.png');
+background-repeat: no-repeat;
+background-size: contain;
+}
+.inactive {font-family: 'Armata', sans-serif; font-size: 12px; text-align: center; line-height: 21px; color: #fff; 
+text-decoration: none; 
+margin: 3px; 
+padding: 4px 8px 4px 8px; 
+background-image: url('../img/pagination_inactive.png');
+background-repeat: no-repeat;
+} 
+.last, .first{display: inline-block;padding-top: 1px;}
+
+.normalFont {color: #fff; font-family: 'Armata', sans-serif; font-size: 12px;}
+#nb-enregistrements {font-family: 'Armata', sans-serif;font-weight:bold; font-size: 14px; display: block; clear: both; margin-top: 7px;color:#601421}
+
+
+/** media queries **/
+@media screen and (max-width: 768px) {
+	body{background-image: url('../img/background_xs.png');background-position: top center;background-repeat: no-repeat;}
+	nav ul li {height: auto; margin-left: 20px;text-align: left;}
+	nav ul li:hover {height: 30px; background-color: #601421; cursor: pointer;}
+	nav a{line-height: 30px}
+	#btn_recherche{line-height:0px;}
+	section #panels{height:760px}
+	nav{background-color: #742230; height: 113px;}
+	#logo{height:110px;margin-top:1px; border:solid 1px;}
+	#mode_demo{margin: 0}
+}
+@media screen and (min-width: 768px) and (max-width: 992px) {
+	body{background-image: url('../img/background_sm.png');background-position: center top ;background-repeat: no-repeat;}
+}
+@media screen and (min-width: 992px) and (max-width: 2000px) {
+	body{background-image: url('../img/background_md.png');background-position: center top ;background-repeat: no-repeat;}
+}
+@media screen and (min-width: 2000px) {
+	body{background-image: url('../img/background_lg.png');background-position: top center ;background-repeat: no-repeat;}
+}
