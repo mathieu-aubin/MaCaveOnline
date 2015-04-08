@@ -2,7 +2,7 @@
 
 	$datas = array(
 		'nom' => 'vin_test1',
-		'annee' => '1999-01-01',
+		'annee' => '1937',
 		'region' => 'regionTest',
 		'appellation' => 1,
 		'type' => 1,
@@ -18,7 +18,7 @@
 		'favori' => 0,
 		'prixAchat' => 55,
 		'offertPar' => 'Serge',
-		'commentaires' => 'blablabla',
+		'commentaires' => 'blébléblé',
 		'utilisateur' => 3
 	);
 
@@ -34,6 +34,7 @@
 	<form action="webservice_insert.php" method="post">
 		<input type="hidden" name="donneesVin" value=<?php echo $donnees; ?> >
 		<input type="submit" value="Test Insert">
+
 	</form>
 </body>
 </html>
