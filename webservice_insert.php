@@ -36,8 +36,7 @@
 	}
 
 	// Gestion nouvelle région
-	$newRegion = isNouvelleEntree($region);
-	if($newRegion)
+	if(gettype($newRegion) == "string")
 	{
 		// Insertion du nom de la nouvelle région
 		$insertNouvelleRegion = $connexion->prepare('INSERT INTO region(region) VALUES(:region)');
@@ -53,8 +52,7 @@
 		else $erreur = true;
 
 		// Gestion nouvelle appellation si présente avec la nouvelle région
-		$newAoc = isNouvelleEntree($appellation);
-		if($newAoc)
+		if(gettype($newAoc) == "string")
 		{
 			// Insertion de la nouvelle appellation
 			$insertNouvelleAppellation = $connexion->prepare('INSERT INTO appellation(appellation, FK_region) VALUES(:aoc, :region)');
@@ -73,8 +71,7 @@
 	}
 
 	// Gestion nouveau lieu d'achat
-	$newAchat = isNouvelleEntree($lieuAchat);
-	if($newAchat)
+	if(gettype($newAchat) == "string")
 	{
 		// Insertion du nouveau lieu d'achat
 		$insertNouveauLieuAchat = $connexion->prepare('INSERT INTO lieu_achat(lieu_achat) VALUES(:lieu_achat)');
@@ -91,8 +88,7 @@
 	}
 
 	// Gestion nouveau lieu de stockage
-	$newStockage = isNouvelleEntree($lieuStockage);
-	if($newStockage)
+	if(gettype($newStockage) == "string")
 	{
 		$insertNouveauLieuStockage = $connexion->prepare('INSERT INTO lieu_stockage(lieu_stockage) VALUES(:lieu_stockage)');
 		$insertNouveauLieuStockage->bindValue('lieu_stockage', $lieuStockage, PDO::PARAM_STR);
@@ -161,12 +157,4 @@ exit;*/
 		$erreur = true;
 	}
 
-	
-
-	// On vérifie si on a une nouvelle entrée pour une valeur
-	function isNouvelleEntree($value)
-	{
-		if(gettype($value) == "string") return true;
-		return false;
-	}
 ?>
