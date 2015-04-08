@@ -2,6 +2,7 @@
 	
 	// $connexion pour accès PDO
 	require 'connexion.php';
+	include_once 'nouvelleEntree.php';
 
 	/*** Initialisation variables ***/
 	$erreur = false;
@@ -38,69 +39,25 @@
 	// Gestion nouvelle région
 	if(gettype($region) == "string")
 	{
-		// Insertion du nom de la nouvelle région
-		$insertNouvelleRegion = $connexion->prepare('INSERT INTO region(region) VALUES(:region)');
-		$insertNouvelleRegion->bindValue('region', $region, PDO::PARAM_STR);
-		$res = $insertNouvelleRegion->execute();
-		// Vérification du résultat de la requête
-		// On récupère l'id crée pour l'utiliser dans les prochaines requêtes
-		if($res) 
-		{
-			$region = $connexion->lastInsertId();
-			$insertNouvelleRegion->closeCursor();
-		}
-		else $erreur = true;
+		$region = insertNewRegion($region);
 
 		// Gestion nouvelle appellation si présente avec la nouvelle région
 		if(gettype($appellation) == "string")
 		{
-			// Insertion de la nouvelle appellation
-			$insertNouvelleAppellation = $connexion->prepare('INSERT INTO appellation(appellation, FK_region) VALUES(:aoc, :region)');
-			$insertNouvelleAppellation->bindValue('aoc', $appellation, PDO::PARAM_STR);
-			$insertNouvelleAppellation->bindValue('region', $region, PDO::PARAM_INT);
-			$res = $insertNouvelleAppellation->execute();
-			// Vérification du résultat de la requête
-			// On récupère l'id crée pour l'utiliser dans les prochaines requêtes
-			if($res) 
-			{
-				$appellation = $connexion->lastInsertId();
-				$insertNouvelleAppellation->closeCursor();
-			}
-			else $erreur = true;
+			$appellation = $insertNewAoc($appellation, $region);
 		}
 	}
 
 	// Gestion nouveau lieu d'achat
 	if(gettype($lieuAchat) == "string")
 	{
-		// Insertion du nouveau lieu d'achat
-		$insertNouveauLieuAchat = $connexion->prepare('INSERT INTO lieu_achat(lieu_achat) VALUES(:lieu_achat)');
-		$insertNouveauLieuAchat->bindValue('lieu_achat', $lieuAchat, PDO::PARAM_STR);
-		$res = $insertNouveauLieuAchat->execute();
-		// Vérification du résultat de la requête
-		// On récupère l'id crée pour l'utiliser dans les prochaines requêtes
-		if($res) 
-		{
-			$lieuAchat = $connexion->lastInsertId();
-			$insertNouveauLieuAchat->closeCursor();
-		}
-		else $erreur = true;
+		$lieuAchat = insertNewLieuAchat($lieuAchat);
 	}
 
 	// Gestion nouveau lieu de stockage
 	if(gettype($lieuStockage) == "string")
 	{
-		$insertNouveauLieuStockage = $connexion->prepare('INSERT INTO lieu_stockage(lieu_stockage) VALUES(:lieu_stockage)');
-		$insertNouveauLieuStockage->bindValue('lieu_stockage', $lieuStockage, PDO::PARAM_STR);
-		$res = $insertNouveauLieuStockage->execute();
-		// Vérification du résultat de la requête
-		// On récupère l'id crée pour l'utiliser dans les prochaines requêtes
-		if($res) 
-		{
-			$lieuStockage = $connexion->lastInsertId();
-			$insertNouveauLieuStockage->closeCursor();
-		}
-		else $erreur = true;
+		$lieuStockage = insertNewLieuStockage($lieuStockage);
 	}
 
 	/*$req = 'INSERT INTO vins(
@@ -127,56 +84,58 @@
 		)';
 echo $req;
 exit;*/
-
-	// Préparation requete insertion d'un nouveau vin (non lié à un utilisateur)
-	$insertVin = 'INSERT INTO vins(FK_region, FK_type, FK_appellation, nom, annee, degre_alcool, conso_partir, conso_avant, FK_type_plat, Demo) 
-		VALUES(:FK_region, :FK_type, :FK_appellation, :nom, :annee, :degre_alcool, :conso_partir, :conso_avant, :FK_type_plat, :Demo)';
-	$stmt = $connexion->prepare($insertVin);
-	$stmt->bindValue(':FK_region', $region, PDO::PARAM_INT);
-	$stmt->bindValue(':FK_type', $type, PDO::PARAM_INT);
-	$stmt->bindValue(':FK_appellation', $appellation, PDO::PARAM_INT);
-	$stmt->bindValue(':nom', $nom, PDO::PARAM_STR);
-	$stmt->bindValue(':annee', $annee);
-	$stmt->bindValue(':degre_alcool', $degreAlcool, PDO::PARAM_STR);
-	$stmt->bindValue(':conso_partir', $consoPartir);
-	$stmt->bindValue(':conso_avant', $consoAvant);
-	$stmt->bindValue(':FK_type_plat', $typePlat, PDO::PARAM_STR);
-	$stmt->bindValue(':Demo', $demo);
-	$resultatRequete = $stmt->execute();
-
-	// on renvoie le résultat de la requête
-	// On récupère l'id crée pour l'utiliser dans la prochaine requête
-	if($resultatRequete)
+	if($region != false && $appellation != false && $lieuAchat != false && $lieuStockage != false)
 	{
-		$idVin = $connexion->lastInsertId();
-		$stmt->closeCursor();
-		echo "IdVin : ".$idVin.'<br>';
-		$insertUserVin = 'INSERT INTO utilisateur_vin(FK_vin, FK_utilisateur, note, nb_bouteilles, suivi_stock, meilleur_vin, prix_achat, offert_par, FK_lieu_achat, FK_lieu_stockage, conso_partir, conso_avant, commentaires)
-			VALUES(:FK_vin, :FK_utilisateur, :note, :nb_bouteilles, :suivi_stock, :meilleur_vin, :prix_achat, :offert_par, :FK_lieu_achat, :FK_lieu_stockage, :conso_partir, :conso_avant, :commentaires)';
-		$stmt = $connexion->prepare($insertUserVin);
-		$stmt->bindValue(':FK_vin', $idVin, PDO::PARAM_INT);
-		$stmt->bindValue(':FK_utilisateur', $utilisateur, PDO::PARAM_INT);
-		$stmt->bindValue(':note', $note, PDO::PARAM_STR);
-		$stmt->bindValue(':nb_bouteilles', $nbBouteilles, PDO::PARAM_STR);
-		$stmt->bindValue(':suivi_stock', $suiviStock);
-		$stmt->bindValue(':meilleur_vin', $favori, PDO::PARAM_STR);
-		$stmt->bindValue(':prix_achat', $prixAchat);
-		$stmt->bindValue(':offert_par', $offertPar);
-		$stmt->bindValue(':FK_lieu_achat', $lieuAchat, PDO::PARAM_STR);
-		$stmt->bindValue(':FK_lieu_stockage', $lieuStockage, PDO::PARAM_STR);
-		$stmt->bindValue(':conso_partir', $consoPartir, PDO::PARAM_STR);
-		$stmt->bindValue(':conso_avant', $consoAvant, PDO::PARAM_STR);
-		$stmt->bindValue(':commentaires', $commentaires);
-		$resRequete = $stmt->execute();
+		// Préparation requete insertion d'un nouveau vin (non lié à un utilisateur)
+		$insertVin = 'INSERT INTO vins(FK_region, FK_type, FK_appellation, nom, annee, degre_alcool, conso_partir, conso_avant, FK_type_plat, Demo) 
+			VALUES(:FK_region, :FK_type, :FK_appellation, :nom, :annee, :degre_alcool, :conso_partir, :conso_avant, :FK_type_plat, :Demo)';
+		$stmt = $connexion->prepare($insertVin);
+		$stmt->bindValue(':FK_region', $region, PDO::PARAM_INT);
+		$stmt->bindValue(':FK_type', $type, PDO::PARAM_INT);
+		$stmt->bindValue(':FK_appellation', $appellation, PDO::PARAM_INT);
+		$stmt->bindValue(':nom', $nom, PDO::PARAM_STR);
+		$stmt->bindValue(':annee', $annee);
+		$stmt->bindValue(':degre_alcool', $degreAlcool, PDO::PARAM_STR);
+		$stmt->bindValue(':conso_partir', $consoPartir);
+		$stmt->bindValue(':conso_avant', $consoAvant);
+		$stmt->bindValue(':FK_type_plat', $typePlat, PDO::PARAM_STR);
+		$stmt->bindValue(':Demo', $demo);
+		$resultatRequete = $stmt->execute();
 
-		if($resRequete)
+		// on renvoie le résultat de la requête
+		// On récupère l'id crée pour l'utiliser dans la prochaine requête
+		if($resultatRequete)
 		{
-			echo 'Vin inséré !<br>';
+			$idVin = $connexion->lastInsertId();
 			$stmt->closeCursor();
-		}
-		else
-		{
-			$erreur = true;
+			echo "IdVin : ".$idVin.'<br>';
+			$insertUserVin = 'INSERT INTO utilisateur_vin(FK_vin, FK_utilisateur, note, nb_bouteilles, suivi_stock, meilleur_vin, prix_achat, offert_par, FK_lieu_achat, FK_lieu_stockage, conso_partir, conso_avant, commentaires)
+				VALUES(:FK_vin, :FK_utilisateur, :note, :nb_bouteilles, :suivi_stock, :meilleur_vin, :prix_achat, :offert_par, :FK_lieu_achat, :FK_lieu_stockage, :conso_partir, :conso_avant, :commentaires)';
+			$stmt = $connexion->prepare($insertUserVin);
+			$stmt->bindValue(':FK_vin', $idVin, PDO::PARAM_INT);
+			$stmt->bindValue(':FK_utilisateur', $utilisateur, PDO::PARAM_INT);
+			$stmt->bindValue(':note', $note, PDO::PARAM_STR);
+			$stmt->bindValue(':nb_bouteilles', $nbBouteilles, PDO::PARAM_STR);
+			$stmt->bindValue(':suivi_stock', $suiviStock);
+			$stmt->bindValue(':meilleur_vin', $favori, PDO::PARAM_STR);
+			$stmt->bindValue(':prix_achat', $prixAchat);
+			$stmt->bindValue(':offert_par', $offertPar);
+			$stmt->bindValue(':FK_lieu_achat', $lieuAchat, PDO::PARAM_STR);
+			$stmt->bindValue(':FK_lieu_stockage', $lieuStockage, PDO::PARAM_STR);
+			$stmt->bindValue(':conso_partir', $consoPartir, PDO::PARAM_STR);
+			$stmt->bindValue(':conso_avant', $consoAvant, PDO::PARAM_STR);
+			$stmt->bindValue(':commentaires', $commentaires);
+			$resRequete = $stmt->execute();
+
+			if($resRequete)
+			{
+				echo 'Vin inséré !<br>';
+				$stmt->closeCursor();
+			}
+			else
+			{
+				$erreur = true;
+			}
 		}
 	}
 	else
