@@ -49,15 +49,20 @@
   <title>Test Webservice</title>
 </head>
 <body>
-	<form action="webservice_insert.php" method="post">
-		<input type="hidden" name="donneesVin" value=<?php echo $donneesInsert; ?> >
-		<input type="submit" value="Test Insert">
-
-	</form>
-	<form action="webservice_update.php" method="post">
-		<input type="hidden" name="donneesVin" value=<?php echo $donneesUpdate; ?> >
-		<input type="submit" value="Test Update">
-
-	</form>
+	<div id="container" style='margin: 100px auto; width: 1200px;'>
+		<form action="webservice_insert.php" method="post" style="margin-bottom: 20px;">
+			<input type="hidden" name="donneesVin" value=<?php echo $donneesInsert; ?> >
+			<input type="submit" value="Test Insert">
+		</form>
+		<form action="webservice_update.php" method="post" style="margin-bottom: 20px;">
+			<input type="hidden" name="donneesVin" value=<?php echo $donneesUpdate; ?> >
+			<input type="submit" value="Test Update">
+		</form>
+		<form action="webservice_delete.php" method="post" style="margin-bottom: 20px;">
+			<label for="vinSuppr">Vin à supprimer : </label>
+			<input type="text" name="vinSuppr">
+			<input type="submit" value="Test Delete">
+		</form>
+	</div>
 </body>
 </html>
