@@ -22,7 +22,25 @@
 		'utilisateur' => 3
 	);
 
-	$donnees = json_encode($datas);
+	$donneesInsert = json_encode($datas);
+
+	$datas2 = array(
+		'idVin' => 325,
+		'lieuStockage' => 'lieuTest',
+		'lieuAchat' => 'LieuTest',
+		'consoPartir' => '2023-01-01',
+		'consoAvant' => '2023-01-01',
+		'typePlat' => NULL,
+		'note' => 13,
+		'nbBouteilles' => 5,
+		'suiviStock' => 1,
+		'favori' => 1,
+		'prixAchat' => NULL,
+		'offertPar' => 'Sergio',
+		'commentaires' => 'blabla',
+		'idUtilisateur' => 3
+	);
+	$donneesUpdate = json_encode($datas2);
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -32,8 +50,13 @@
 </head>
 <body>
 	<form action="webservice_insert.php" method="post">
-		<input type="hidden" name="donneesVin" value=<?php echo $donnees; ?> >
+		<input type="hidden" name="donneesVin" value=<?php echo $donneesInsert; ?> >
 		<input type="submit" value="Test Insert">
+
+	</form>
+	<form action="webservice_update.php" method="post">
+		<input type="hidden" name="donneesVin" value=<?php echo $donneesUpdate; ?> >
+		<input type="submit" value="Test Update">
 
 	</form>
 </body>
