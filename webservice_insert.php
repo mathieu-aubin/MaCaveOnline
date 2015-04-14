@@ -9,6 +9,7 @@
 
 	// Récupération des données de l'appli
 	$donnees = $_POST['donneesVin'];
+	//var_dump($donnees);
 	// Parser le json reçu 
 	if(isset($donnees) && $donnees !== NULL)
 	{
