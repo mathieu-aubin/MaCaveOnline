@@ -1,7 +1,7 @@
 <?php
 
 	$datas = array(
-		'nom' => 'vin_test1',
+		'nom' => 'Les bons vins',
 		'annee' => '1937',
 		'region' => 'regionTest',
 		'appellation' => 1,
@@ -18,10 +18,11 @@
 		'favori' => 0,
 		'prixAchat' => 55,
 		'offertPar' => 'Serge',
-		'commentaires' => 'blébléblé',
+		'commentaires' => 'blé blé blé',
 		'utilisateur' => 3
 	);
-
+	
+	//echo json_encode($datas);
 	$donneesInsert = json_encode($datas);
 
 	$datas2 = array(
@@ -62,6 +63,10 @@
 			<label for="vinSuppr">Vin à supprimer : </label>
 			<input type="text" name="vinSuppr">
 			<input type="submit" value="Test Delete">
+		</form>
+		<form action="webservice_select.php" method="post" style="margin-bottom: 20px;">
+			<input type="hidden" name="idUtilisateur" value='3' >
+			<input type="submit" value="Select Vins">
 		</form>
 	</div>
 </body>

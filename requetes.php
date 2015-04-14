@@ -227,7 +227,7 @@ if(isset($_SESSION['login']) && isset($_SESSION['pass'])) {
                 $lieu_achat = 1;
             }
             else {
-                $new_lieu_achat = $_POST['achat_modif'];
+                $new_lieu_achat = addslashes(utf8_decode($_POST['achat_modif']));
                 $req_achat = "INSERT INTO lieu_achat(lieu_achat) VALUES(:lieu_achat)";
                 $res_achat = $connexion->prepare($req_achat);
                 $res_achat->bindValue(":lieu_achat", $new_lieu_achat, PDO::PARAM_STR);
@@ -246,7 +246,7 @@ if(isset($_SESSION['login']) && isset($_SESSION['pass'])) {
                 $lieu_stockage = 1;
             }
             else {
-                $new_lieu_stockage = $_POST['stockage_modif'];
+                $new_lieu_stockage = addslashes(utf8_decode($_POST['stockage_modif']));
                 $req_stockage = "INSERT INTO lieu_stockage(lieu_stockage) VALUES(:lieu_stockage)";
                 $res_stockage = $connexion->prepare($req_stockage);
                 $res_stockage->bindValue(":lieu_stockage", $new_lieu_stockage, PDO::PARAM_STR);
@@ -314,7 +314,7 @@ if(isset($_SESSION['login']) && isset($_SESSION['pass'])) {
         $erreur = '';
         $erreur_vin = '';
         /**nom du vin**/
-        $nom_vin = utf8_decode($_POST['nom_vin']);
+        $nom_vin = addslashes(utf8_decode($_POST['nom_vin']));
         /**gestion erreur sur nom du vin (champ vide)**/
         if ($nom_vin == '') $erreur .= 'nom';
         /**année du vin**/
@@ -338,7 +338,7 @@ if(isset($_SESSION['login']) && isset($_SESSION['pass'])) {
         
         /**si nouvelle région**/
         if ($region == 'autre') {
-            $new_region = utf8_decode($_POST['region_ajout']);
+            $new_region = addslashes(utf8_decode($_POST['region_ajout']));
             /**on regarde si la region n'est pas déjà dans la table**/
             $check_region = "SELECT region FROM region WHERE region = '".$new_region."'";
             $res_check = $connexion->query($check_region);
@@ -366,7 +366,7 @@ if(isset($_SESSION['login']) && isset($_SESSION['pass'])) {
         }
         /**si nouvelle région, on a aussi une AOC**/
         $new_aoc = '';
-        if (isset($_POST['aoc_new'])) $new_aoc = $_POST['aoc_new'];
+        if (isset($_POST['aoc_new'])) $new_aoc = addslashes(utf8_decode($_POST['aoc_new']));
         /**si AOC via liste déroulante**/
         else if (isset($_POST['select_aoc'])) {
             /** si nouvelle AOC**/  

@@ -9,11 +9,10 @@
 
 	// Récupération des données de l'appli
 	$donnees = $_POST['donneesVin'];
-	
 	// Parser le json reçu 
-	if(isset($donnees) && $donnees != '')
+	if(isset($donnees) && $donnees !== NULL)
 	{
-		$donnees = json_decode($donnees);		
+		$donnees = json_decode($donnees);	
 		$nom = $donnees->nom;
 		$annee = $donnees->annee;
 		$region = $donnees->region;
@@ -108,7 +107,7 @@ exit;*/
 		{
 			$idVin = $connexion->lastInsertId();
 			$stmt->closeCursor();
-			echo "IdVin : ".$idVin.'<br>';
+			//echo "IdVin : ".$idVin.'<br>';
 			$insertUserVin = 'INSERT INTO utilisateur_vin(FK_vin, FK_utilisateur, note, nb_bouteilles, suivi_stock, meilleur_vin, prix_achat, offert_par, FK_lieu_achat, FK_lieu_stockage, conso_partir, conso_avant, commentaires)
 				VALUES(:FK_vin, :FK_utilisateur, :note, :nb_bouteilles, :suivi_stock, :meilleur_vin, :prix_achat, :offert_par, :FK_lieu_achat, :FK_lieu_stockage, :conso_partir, :conso_avant, :commentaires)';
 			$stmt = $connexion->prepare($insertUserVin);
@@ -129,7 +128,7 @@ exit;*/
 
 			if($resRequete)
 			{
-				echo 'Vin inséré !<br>';
+				//echo 'Vin inséré !<br>';
 				$stmt->closeCursor();
 			}
 			else
@@ -145,7 +144,7 @@ exit;*/
 
 	if($erreur)
 	{
-		echo 'ERREUR';
+		echo 'erreur';
 	}
 
 ?>
