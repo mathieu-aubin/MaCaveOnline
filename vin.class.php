@@ -1,39 +1,39 @@
 <?php
 
-	/**
-	* Classe Vin
-	*/
-	class Vin
-	{
-		private $idVin;
-		private $nom;
-		private $region;
-		private $appellation;
-		private $annee;
-		private $type;
-		private $degreAlcool;
-		private $lieuStockage;
+    /**
+     * Classe Vin.
+     */
+    class Vin
+    {
+        private $idVin;
+        private $nom;
+        private $region;
+        private $appellation;
+        private $annee;
+        private $type;
+        private $degreAlcool;
+        private $lieuStockage;
         private $lieuAchat;
-		private $consoPartir;
-		private $consoAvant;
-		private $typePlat;
-		private $nbBouteilles;
-		private $suiviStock;
-		private $favori;
-		private $note;
-		private $prixAchat;
-		private $offertPar;
-		private $commentaires;
+        private $consoPartir;
+        private $consoAvant;
+        private $typePlat;
+        private $nbBouteilles;
+        private $suiviStock;
+        private $favori;
+        private $note;
+        private $prixAchat;
+        private $offertPar;
+        private $commentaires;
 
-		function __construct($nom, $region, $appellation=null, $annee, $type, $degreAlcool=null, $lieuStockage=null, $lieuAchat=null, $consoPartir=null, $consoAvant=null, $typePlat=null, $nbBouteilles=null, $suiviStock=null, $favori=null, $note=null, $prixAchat=null, $offertPar=null, $commentaires=null)
-		{
-			$this->setNom($nom);
-			$this->setRegion($region);
-			$this->setAppellation($appellation);
-			$this->setAnnee($annee);
-			$this->setType($type);
-		}
-	
+        public function __construct($nom, $region, $appellation, $annee, $type, $degreAlcool = null, $lieuStockage = null, $lieuAchat = null, $consoPartir = null, $consoAvant = null, $typePlat = null, $nbBouteilles = null, $suiviStock = null, $favori = null, $note = null, $prixAchat = null, $offertPar = null, $commentaires = null)
+        {
+            $this->setNom($nom);
+            $this->setRegion($region);
+            $this->setAppellation($appellation);
+            $this->setAnnee($annee);
+            $this->setType($type);
+        }
+
     /**
      * Gets the value of idVin.
      *
@@ -225,7 +225,8 @@
 
         return $this;
     }
-/**
+
+    /**
      * Gets the value of lieuAchat.
      *
      * @return mixed
@@ -488,7 +489,4 @@
 
         return $this;
     }
-}
-
-	
-?>
+    }
