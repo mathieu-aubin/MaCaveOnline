@@ -1,19 +1,18 @@
 <?php
 
-	require_once('vin.class.php');
+    require_once 'vin.class.php';
 
-	/**
-	* 
-	*/
-	class vinBlanc extends Vin
-	{
-		private $type;
-		function __construct($type)
-		{
-			parent::__construct();
-			$this->setType($type);
-		}
-	
+
+    class vinBlanc extends Vin
+    {
+        private $type;
+
+        public function __construct($type)
+        {
+            parent::__construct();
+            $this->setType($type);
+        }
+
     /**
      * Gets the value of type.
      *
@@ -37,6 +36,4 @@
 
         return $this;
     }
-}
-
-?>
+    }

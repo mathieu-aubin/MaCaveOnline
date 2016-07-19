@@ -1,5 +1,5 @@
 <?php
-	session_start();
+    session_start();
 ?>
 
 <!doctype html>
@@ -31,8 +31,8 @@
 		</header>
 		<section class="row" id="section_demo">
 			<?php
-				if(!empty($_SESSION['user'])) {
-					echo ("<script>
+                if (!empty($_SESSION['user'])) {
+                    echo "<script>
 							$(function(e) {
 	            				bootbox.dialog({
 	            					message: 'Vous êtes déjà connecté, voulez-vous accéder au site?',
@@ -55,8 +55,7 @@
 								    }	
 	       						});
 							});
-					    </script>");
-				?>
+					    </script>"; ?>
 				<form action='login.php' method='post' id='login_form' role='form'>
 					<div class='col-xs-12 col-sm-12 col-md-6 col-lg-6'>
 						<label for='name' class='control-label'>Identifiant : </label>
@@ -71,8 +70,8 @@
 				<button id='mode_demo' class='btn btn-info pull-right' onclick='mode_demo("demo", "demo");'>Accéder au mode démo</button>
 						<p>
 				<?php 
-					if(isset($_GET['erreur'])) {
-						echo "<script>
+                    if (isset($_GET['erreur'])) {
+                        echo "<script>
 								$(function(e) {
 			           				bootbox.dialog({
 			           					message: 'Erreur de connexion. Veuillez essayer à nouveau.',
@@ -86,11 +85,10 @@
 			       					});
 								});
 						    </script>";
-					}
-					echo "</p>";
-				}
-				else {
-			?>
+                    }
+                    echo '</p>';
+                } else {
+                    ?>
 			<form action="login.php" method="post" id="login_form" role="form">
 				<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
 					<label for="name" class="control-label">Identifiant : </label>
@@ -104,8 +102,8 @@
 			</form>
 			<button id="mode_demo" class="btn btn-info pull-right" onclick="mode_demo('demo', 'demo');">Accéder au mode démo</button>
 			<p><?php 
-				if(isset($_GET['erreur'])) {
-					echo "<script>
+                if (isset($_GET['erreur'])) {
+                    echo "<script>
 							$(function(e) {
 	            				bootbox.dialog({
 	            					message: 'Erreur de connexion. Veuillez essayer à nouveau.',
@@ -119,10 +117,10 @@
 	       						});
 							});
 					    </script>";
-				}
-				echo "</p>";
-			}
-			?>
+                }
+                    echo '</p>';
+                }
+            ?>
 		</section>
 		<footer>
 			

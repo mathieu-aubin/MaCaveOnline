@@ -1,10 +1,10 @@
 <?php
-	session_start();
-	if(isset($_SESSION['login']) && isset($_SESSION['pass'])) {
-		include 'connexion.php';
-		if(isset($_POST['id_vin_modif'])) {
-			$id_vin = $_POST['id_vin_modif'];
-			$requete = "SELECT 
+    session_start();
+    if (isset($_SESSION['login']) && isset($_SESSION['pass'])) {
+        include 'connexion.php';
+        if (isset($_POST['id_vin_modif'])) {
+            $id_vin = $_POST['id_vin_modif'];
+            $requete = 'SELECT 
 	                    FK_vin, 
 	                    FK_utilisateur,
 	                    note, 
@@ -29,29 +29,28 @@
 	                    ON vins.FK_appellation = appellation.id_appellation
 	                LEFT JOIN type_vin 
 	                    ON vins.FK_type = type_vin.id_type
-	                WHERE FK_vin =".$id_vin."
-	                    AND FK_utilisateur = ".$_SESSION['user']; 
-		    //echo $requete;
-		    $select = $connexion->query($requete);
-		    $select->setFetchMode(PDO::FETCH_ASSOC);
+	                WHERE FK_vin ='.$id_vin.'
+	                    AND FK_utilisateur = '.$_SESSION['user'];
+            //echo $requete;
+            $select = $connexion->query($requete);
+            $select->setFetchMode(PDO::FETCH_ASSOC);
 
-		    while ($ligne = $select->fetch()) {
-		        $nom_vin_fiche = utf8_encode($ligne['nom']);
-		        $annee_fiche = $ligne['annee'];
-		        $note_fiche = $ligne['note'];
-		        $nb_bouteilles_fiche = $ligne['nb_bouteilles'];
-		        $suivi_stock_fiche = $ligne['suivi_stock'];
-		        $meilleur_vin_fiche = $ligne['meilleur_vin'];
-		        $prix_achat_fiche = $ligne['prix_achat'];
-		        $offert_par_fiche = utf8_encode($ligne['offert_par']);
-		        $lieu_achat_fiche = $ligne['FK_lieu_achat'];
-		        $lieu_stockage_fiche = $ligne['FK_lieu_stockage'];
-		        $conso_partir_fiche = $ligne['conso_partir'];
-		        $conso_avant_fiche = $ligne['conso_avant'];
-		        $commentaires_fiche = utf8_encode($ligne['commentaires']);
-		    }
-		    $select->closeCursor();
-?>
+            while ($ligne = $select->fetch()) {
+                $nom_vin_fiche = utf8_encode($ligne['nom']);
+                $annee_fiche = $ligne['annee'];
+                $note_fiche = $ligne['note'];
+                $nb_bouteilles_fiche = $ligne['nb_bouteilles'];
+                $suivi_stock_fiche = $ligne['suivi_stock'];
+                $meilleur_vin_fiche = $ligne['meilleur_vin'];
+                $prix_achat_fiche = $ligne['prix_achat'];
+                $offert_par_fiche = utf8_encode($ligne['offert_par']);
+                $lieu_achat_fiche = $ligne['FK_lieu_achat'];
+                $lieu_stockage_fiche = $ligne['FK_lieu_stockage'];
+                $conso_partir_fiche = $ligne['conso_partir'];
+                $conso_avant_fiche = $ligne['conso_avant'];
+                $commentaires_fiche = utf8_encode($ligne['commentaires']);
+            }
+            $select->closeCursor(); ?>
 <!doctype html>
 <html lang="fr">
 <head>
@@ -79,119 +78,138 @@
 </head>
 <body>
 	<?php
-		include 'header.php';
-	?>
+        include 'header.php'; ?>
 		<section>
 			<div class='row'>
 				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 					<div class="panel panel-primary">
 						<div class="panel-heading">
-							<h2 class="panel-title"><?php echo $nom_vin_fiche." - ".$annee_fiche; ?></h2>
+							<h2 class="panel-title"><?php echo $nom_vin_fiche.' - '.$annee_fiche; ?></h2>
 						</div>
 						<div class="panel-body">
 							<form method='post' action='requetes.php' role='form' onsubmit="return verif_modif()">
 				<?php
-					// construction du select pour la note
-					$select_note_fiche = "<select id='select_note_fiche' name='select_note_fiche' class='form-control'><option value=''>Choisir une note</option>";
-					for ($i=0; $i < 21; $i++) {
-						if(($note_fiche != 0) && ($i == $note_fiche)) $select_note_fiche .= "<option value=".$i." selected>".$i."</option>";
-						else $select_note_fiche .= "<option value=".$i.">".$i."</option>";
-					}
-					$select_note_fiche .= "</select>";
-					//on test si le suivi de stock est actif ou non
-					if ($suivi_stock_fiche == 1) $checked_suivi = "checked";
-					else $checked_suivi = "";
-					//test si l'option meilleur vin est active
-					if($meilleur_vin_fiche == 1) $checked_meilleurvin = "checked";
-					else $checked_meilleurvin = "";
-					//requete pour la construction du select du lieu d'achat
-					$reqselect_achat = "SELECT id_lieu_achat, lieu_achat FROM lieu_achat";
-					$res_achat = $connexion->query($reqselect_achat);
-					$res_achat->setFetchMode(PDO::FETCH_ASSOC);
-					$lieu_achat = [];
-					while($row = $res_achat->fetch()) {
-					 	$ligne1[] = $row['id_lieu_achat']; 
-					 	$ligne2[] = $row['lieu_achat'];
-					}
-					$lieu_achat = array($ligne1, $ligne2);
-					$select_achat = "<select id='select_lieu_achat' name='select_lieu_achat' onchange='option_autre(this.id, this.options[this.selectedIndex].value, \"modif\");' class='form-control col-lg-4'><option value=''>Choisir un lieu d'achat</option>";
-					for ($i=0; $i < count($ligne1) ; $i++) { 
-						if($lieu_achat[0][$i] == $lieu_achat_fiche) $select_achat .= "<option value=".$lieu_achat[0][$i]." selected>".$lieu_achat[1][$i]."</option>";
-						else $select_achat .= "<option value=".$lieu_achat[0][$i].">".$lieu_achat[1][$i]."</option>";
-					}
-					$select_achat .= "<option value='autre'>Autre...</option></select>";
-					$res_achat->closeCursor();
-					//requete pour la construction du select du lieu de stockage
-					$reqselect_stockage = "SELECT id_lieu_stockage, lieu_stockage FROM lieu_stockage";
-					$res_stockage = $connexion->query($reqselect_stockage);
-					$res_stockage->setFetchMode(PDO::FETCH_ASSOC);
-					$lieu_stockage = [];
-					while ($row2 = $res_stockage->fetch()) {
-						$ligneA[] = $row2['id_lieu_stockage'];
-						$ligneB[] = $row2['lieu_stockage'];
-					}
-					$lieu_stockage = array($ligneA, $ligneB);
-					$select_stockage = "<select id='select_lieu_stockage' name='select_lieu_stockage' onchange='option_autre(this.id, this.options[this.selectedIndex].value, \"modif\");' class='form-control'><option value=''>Choisir un lieu de stockage</option>";
-					for ($i=0; $i < count($ligneA) ; $i++) { 
-						if($lieu_stockage[0][$i] == $lieu_stockage_fiche) $select_stockage .= "<option value=".$lieu_stockage[0][$i]." selected>".$lieu_stockage[1][$i]."</option>";
-						else $select_stockage .= "<option value=".$lieu_stockage[0][$i].">".$lieu_stockage[1][$i]."</option>";
-					}
-					$select_stockage .= "<option value='autre'>Autre...</option></select>";
-					$res_stockage->closeCursor();
-					//boucle de construction des options des select pour la date
-					//on récupère l'année en cours
-					$date = getdate();
-					$annee_debut = $date['year'];
-					$annee_fin = $annee_debut + 30;
-					$option_date_partir = "";
-					$option_date_avant = "";
-					for ($j = $annee_debut; $j <= $annee_fin; $j++) {
-						if($j == $conso_partir_fiche) $option_date_partir .= "<option value=".$j." selected>".$j."</option>";
-						else $option_date_partir .= "<option value=".$j.">".$j."</option>";
-						if($j == $conso_avant_fiche) $option_date_avant .= "<option value=".$j." selected>".$j."</option>";
-						else $option_date_avant .= "<option value=".$j.">".$j."</option>";
-					}
-					//gestion commentaires
-					if($commentaires_fiche == '-') $commentaires_fiche = '';
+                    // construction du select pour la note
+                    $select_note_fiche = "<select id='select_note_fiche' name='select_note_fiche' class='form-control'><option value=''>Choisir une note</option>";
+            for ($i = 0; $i < 21; $i++) {
+                if (($note_fiche != 0) && ($i == $note_fiche)) {
+                    $select_note_fiche .= '<option value='.$i.' selected>'.$i.'</option>';
+                } else {
+                    $select_note_fiche .= '<option value='.$i.'>'.$i.'</option>';
+                }
+            }
+            $select_note_fiche .= '</select>';
+                    //on test si le suivi de stock est actif ou non
+                    if ($suivi_stock_fiche == 1) {
+                        $checked_suivi = 'checked';
+                    } else {
+                        $checked_suivi = '';
+                    }
+                    //test si l'option meilleur vin est active
+                    if ($meilleur_vin_fiche == 1) {
+                        $checked_meilleurvin = 'checked';
+                    } else {
+                        $checked_meilleurvin = '';
+                    }
+                    //requete pour la construction du select du lieu d'achat
+                    $reqselect_achat = 'SELECT id_lieu_achat, lieu_achat FROM lieu_achat';
+            $res_achat = $connexion->query($reqselect_achat);
+            $res_achat->setFetchMode(PDO::FETCH_ASSOC);
+            $lieu_achat = [];
+            while ($row = $res_achat->fetch()) {
+                $ligne1[] = $row['id_lieu_achat'];
+                $ligne2[] = $row['lieu_achat'];
+            }
+            $lieu_achat = [$ligne1, $ligne2];
+            $select_achat = "<select id='select_lieu_achat' name='select_lieu_achat' onchange='option_autre(this.id, this.options[this.selectedIndex].value, \"modif\");' class='form-control col-lg-4'><option value=''>Choisir un lieu d'achat</option>";
+            for ($i = 0; $i < count($ligne1); $i++) {
+                if ($lieu_achat[0][$i] == $lieu_achat_fiche) {
+                    $select_achat .= '<option value='.$lieu_achat[0][$i].' selected>'.$lieu_achat[1][$i].'</option>';
+                } else {
+                    $select_achat .= '<option value='.$lieu_achat[0][$i].'>'.$lieu_achat[1][$i].'</option>';
+                }
+            }
+            $select_achat .= "<option value='autre'>Autre...</option></select>";
+            $res_achat->closeCursor();
+                    //requete pour la construction du select du lieu de stockage
+                    $reqselect_stockage = 'SELECT id_lieu_stockage, lieu_stockage FROM lieu_stockage';
+            $res_stockage = $connexion->query($reqselect_stockage);
+            $res_stockage->setFetchMode(PDO::FETCH_ASSOC);
+            $lieu_stockage = [];
+            while ($row2 = $res_stockage->fetch()) {
+                $ligneA[] = $row2['id_lieu_stockage'];
+                $ligneB[] = $row2['lieu_stockage'];
+            }
+            $lieu_stockage = [$ligneA, $ligneB];
+            $select_stockage = "<select id='select_lieu_stockage' name='select_lieu_stockage' onchange='option_autre(this.id, this.options[this.selectedIndex].value, \"modif\");' class='form-control'><option value=''>Choisir un lieu de stockage</option>";
+            for ($i = 0; $i < count($ligneA); $i++) {
+                if ($lieu_stockage[0][$i] == $lieu_stockage_fiche) {
+                    $select_stockage .= '<option value='.$lieu_stockage[0][$i].' selected>'.$lieu_stockage[1][$i].'</option>';
+                } else {
+                    $select_stockage .= '<option value='.$lieu_stockage[0][$i].'>'.$lieu_stockage[1][$i].'</option>';
+                }
+            }
+            $select_stockage .= "<option value='autre'>Autre...</option></select>";
+            $res_stockage->closeCursor();
+                    //boucle de construction des options des select pour la date
+                    //on récupère l'année en cours
+                    $date = getdate();
+            $annee_debut = $date['year'];
+            $annee_fin = $annee_debut + 30;
+            $option_date_partir = '';
+            $option_date_avant = '';
+            for ($j = $annee_debut; $j <= $annee_fin; $j++) {
+                if ($j == $conso_partir_fiche) {
+                    $option_date_partir .= '<option value='.$j.' selected>'.$j.'</option>';
+                } else {
+                    $option_date_partir .= '<option value='.$j.'>'.$j.'</option>';
+                }
+                if ($j == $conso_avant_fiche) {
+                    $option_date_avant .= '<option value='.$j.' selected>'.$j.'</option>';
+                } else {
+                    $option_date_avant .= '<option value='.$j.'>'.$j.'</option>';
+                }
+            }
+                    //gestion commentaires
+                    if ($commentaires_fiche == '-') {
+                        $commentaires_fiche = '';
+                    }
 
-					//gestion des erreur
-					if(isset($_GET['err_bt'])) {
-						if($_GET['err_bt'] == 1) {
-							$erreur_bt = "Veuillez saisir un nombre entier.";
-							$class_bt = "has-error";
-							$class_span_bt = "help-block";
-						}	
-					}
-					else {
-						$erreur_bt = '';
-						$class_bt = '';
-						$class_span_bt = "";
-					} 
-					if(isset($_GET['err_off'])) {
-						if($_GET['err_off'] == 1) {
-							$erreur_off = "Veuillez saisir du texte.";
-							$class_off = "has-error";
-							$class_span_off = "help-block";
-						}
-					}
-					else {
-						$erreur_off = '';
-						$class_off = '';
-						$class_span_off = "";
-					} 
-					if(isset($_GET['err_pri'])) {
-						if($_GET['err_pri'] == 1) {
-							$erreur_pri = "Veuillez saisir une valeur numérique.";
-							$class_pri = "has-error";
-							$class_span_pri = "help-block";
-						}
-					}
-					else {
-						$erreur_pri = '';
-						$class_pri = '';
-						$class_span_pri = "";
-					} 
-					echo ("
+                    //gestion des erreur
+                    if (isset($_GET['err_bt'])) {
+                        if ($_GET['err_bt'] == 1) {
+                            $erreur_bt = 'Veuillez saisir un nombre entier.';
+                            $class_bt = 'has-error';
+                            $class_span_bt = 'help-block';
+                        }
+                    } else {
+                        $erreur_bt = '';
+                        $class_bt = '';
+                        $class_span_bt = '';
+                    }
+            if (isset($_GET['err_off'])) {
+                if ($_GET['err_off'] == 1) {
+                    $erreur_off = 'Veuillez saisir du texte.';
+                    $class_off = 'has-error';
+                    $class_span_off = 'help-block';
+                }
+            } else {
+                $erreur_off = '';
+                $class_off = '';
+                $class_span_off = '';
+            }
+            if (isset($_GET['err_pri'])) {
+                if ($_GET['err_pri'] == 1) {
+                    $erreur_pri = 'Veuillez saisir une valeur numérique.';
+                    $class_pri = 'has-error';
+                    $class_span_pri = 'help-block';
+                }
+            } else {
+                $erreur_pri = '';
+                $class_pri = '';
+                $class_span_pri = '';
+            }
+            echo "
 						<div class='col-xs-12 col-sm-12 col-md-5 col-lg-5'>
 							<div class='form-group ".$class_bt."' id='nb_bouteilles_modif'>
 								<label class='control-label' for='nb_bouteilles'>Nombre de bouteilles</label>
@@ -250,16 +268,16 @@
 							<input class='btn btn-sm btn-primary pull-right' type='submit' name='modifier' value='Modifier'>
 						</div>
 					</form>
-					</div>"
-					);
-				}
-				?>
+					</div>";
+        } ?>
 				</div>
 			</div>
 		</section>
 	</div> <!-- fin du container -->
 </body>
 </html>
-<?php } 
-	else header('location:accueil.php');
+<?php 
+    } else {
+        header('location:accueil.php');
+    }
 ?>

@@ -1,47 +1,47 @@
 <?php
 
-	$datas = array(
-		'nom' => 'Les bons vins',
-		'annee' => '1937',
-		'region' => 'regionTest',
-		'appellation' => 1,
-		'type' => 1,
-		'degreAlcool' => 33,
-		'lieuStockage' => 1,
-		'lieuAchat' => 2,
-		'consoPartir' => '2042-01-01',
-		'consoAvant' => '2042-01-01',
-		'typePlat' => 1,
-		'note' => 20,
-		'nbBouteilles' => 11,
-		'suiviStock' => 1,
-		'favori' => 0,
-		'prixAchat' => 55,
-		'offertPar' => 'Serge',
-		'commentaires' => 'blé blé blé',
-		'utilisateur' => 3
-	);
-	
-	//echo json_encode($datas);
-	$donneesInsert = json_encode($datas);
+    $datas = [
+        'nom'          => 'Les bons vins',
+        'annee'        => '1937',
+        'region'       => 'regionTest',
+        'appellation'  => 1,
+        'type'         => 1,
+        'degreAlcool'  => 33,
+        'lieuStockage' => 1,
+        'lieuAchat'    => 2,
+        'consoPartir'  => '2042-01-01',
+        'consoAvant'   => '2042-01-01',
+        'typePlat'     => 1,
+        'note'         => 20,
+        'nbBouteilles' => 11,
+        'suiviStock'   => 1,
+        'favori'       => 0,
+        'prixAchat'    => 55,
+        'offertPar'    => 'Serge',
+        'commentaires' => 'blé blé blé',
+        'utilisateur'  => 3,
+    ];
 
-	$datas2 = array(
-		'idVin' => 325,
-		'lieuStockage' => 'lieuTest',
-		'lieuAchat' => 'LieuTest',
-		'consoPartir' => '2023-01-01',
-		'consoAvant' => '2023-01-01',
-		'typePlat' => NULL,
-		'note' => 13,
-		'nbBouteilles' => 5,
-		'suiviStock' => 1,
-		'favori' => 1,
-		'prixAchat' => NULL,
-		'offertPar' => 'Sergio',
-		'commentaires' => 'blabla',
-		'idUtilisateur' => 3
-	);
-	$donneesUpdate = json_encode($datas2);
+    //echo json_encode($datas);
+    $donneesInsert = json_encode($datas);
+
+    $datas2 = [
+        'idVin'         => 325,
+        'lieuStockage'  => 'lieuTest',
+        'lieuAchat'     => 'LieuTest',
+        'consoPartir'   => '2023-01-01',
+        'consoAvant'    => '2023-01-01',
+        'typePlat'      => null,
+        'note'          => 13,
+        'nbBouteilles'  => 5,
+        'suiviStock'    => 1,
+        'favori'        => 1,
+        'prixAchat'     => null,
+        'offertPar'     => 'Sergio',
+        'commentaires'  => 'blabla',
+        'idUtilisateur' => 3,
+    ];
+    $donneesUpdate = json_encode($datas2);
 ?>
 <!DOCTYPE html>
 <html lang="fr">
